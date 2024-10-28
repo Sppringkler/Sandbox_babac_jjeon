@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+//@RestController : @Controller + @ResponseBody(java -> json)
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -19,6 +20,7 @@ public class TodoController {
         this.service = service;
     }
 
+    //crossorigin : 샌드박스 사용을 위해 설정해둔 것.
     @CrossOrigin(origins = "https://ssafysandbox.vercel.app")
     @GetMapping
     public Map<String, Object> read() {

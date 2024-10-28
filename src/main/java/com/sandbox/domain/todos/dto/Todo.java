@@ -18,6 +18,7 @@ public class Todo {
     @Column(nullable = false)
     private boolean completed;
 
+    // 생성할 때 completed값을 false로 지정함
     public Todo(){
         this.completed = false;
     }
