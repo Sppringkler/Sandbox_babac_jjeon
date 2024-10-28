@@ -25,11 +25,15 @@ public class TodoController {
     @GetMapping
     public Map<String, Object> read() {
         List<Todo> todolist =  service.read();
-
-        //응답 구조에 맞게 json만들기
         Map<String,Object> res = new HashMap<>();
-        res.put("message","정상적으로 요청되었습니다.");
-        res.put("todos",todolist);
+
+        if(!todolist.isEmpty()) {
+            res.put("message","정상적으로 요청되었습니다.");
+            res.put("todos",todolist);
+        } else {
+            res.put("message","리스트 없어요");
+        }
+
         return res;
     }
 
