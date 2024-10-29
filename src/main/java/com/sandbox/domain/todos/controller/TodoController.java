@@ -1,40 +1,43 @@
 package com.sandbox.domain.todos.controller;
 
 import com.sandbox.domain.todos.dto.Todo;
+import com.sandbox.domain.todos.dto.TodoResp;
 import com.sandbox.domain.todos.service.TodoService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-
-//@RestController : @Controller + @ResponseBody(java -> json)
-//@CrossOrigin : 샌드박스 사용을 위해 설정해둔 것.
 @RestController
 @RequestMapping("/todos")
-@CrossOrigin(origins = "https://ssafysandbox.vercel.app")
+@CrossOrigin("https://ssafysandbox.vercel.app")
+@RequiredArgsConstructor
 public class TodoController {
-
-    private final TodoService service;
-
-    public TodoController(TodoService service){
-        this.service = service;
-    }
+    private final TodoService ts;
 
     @GetMapping
-    public Map<String, Object> read() {
-        List<Todo> todolist =  service.read();
-        Map<String,Object> res = new HashMap<>();
+    public TodoResp getTodos() {
+        TodoResp todoResp = new TodoResp();
+        todoResp.setMessage("정상적으로 요청되었습니다.");
+        todoResp.setTodos(ts.getTodos());
 
-        if(!todolist.isEmpty()) {
-            res.put("message","정상적으로 요청되었습니다.");
-        } else {
-            res.put("message","리스트 없어요");
-        }
-        res.put("todos",todolist);
-        return res;
+        return todoResp;
     }
 
+    @DeleteMapping("/{todoId}")
+    public String deleteTodo(@PathVariable("todoId") int todoId) {
+        ts.deleteTodo(todoId);
+        return "정상적으로 처리 되었습니다";
+    }
 
+    @PatchMapping("/{todoId}")
+    public String updateTodo(@PathVariable("todoId") int todoId) {
+        ts.updateTodo(todoId);
+        return "정상적으로 처리 되었습니다";
+    }
+
+    @PostMapping
+    public String createTodo(@RequestBody Todo todo) {
+        todo.setCompleted(false);
+        ts.createTodo(todo);
+        return "정상적으로 처리 되었습니다";
+    }
 }

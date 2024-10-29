@@ -5,5 +5,11 @@ import com.sandbox.domain.todos.dto.Todo;
 import java.util.List;
 
 public interface TodoService {
-    public List<Todo> read();
+    List<Todo> getTodos();
+
+    void deleteTodo(int todoId);
+
+    void updateTodo(int todoId);
+
+    void createTodo(Todo todo);
 }

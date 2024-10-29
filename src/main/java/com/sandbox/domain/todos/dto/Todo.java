@@ -1,37 +1,21 @@
 package com.sandbox.domain.todos.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
-@Getter @Setter
 public class Todo {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY) //자동증가
-    private int id;
-
-    @Column(length = 50, nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private boolean completed;
-
-    // 생성할 때 completed값을 false로 지정함
-    public Todo(){
-        this.completed = false;
-    }
-
-    public Todo(String content, boolean completed) {
-        this.content = content;
-        this.completed = completed;
-    }
-
-
-    public Todo(int id, String content, boolean completed) {
-        this.id = id;
-        this.content = content;
-        this.completed = completed;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
+    int id;
+    String content;
+    boolean completed;
 }
