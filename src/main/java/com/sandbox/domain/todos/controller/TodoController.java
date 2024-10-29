@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 //@RestController : @Controller + @ResponseBody(java -> json)
+//@CrossOrigin : 샌드박스 사용을 위해 설정해둔 것.
 @RestController
 @RequestMapping("/todos")
+@CrossOrigin(origins = "https://ssafysandbox.vercel.app")
 public class TodoController {
 
     private final TodoService service;
@@ -20,8 +22,6 @@ public class TodoController {
         this.service = service;
     }
 
-    //crossorigin : 샌드박스 사용을 위해 설정해둔 것.
-    @CrossOrigin(origins = "https://ssafysandbox.vercel.app")
     @GetMapping
     public Map<String, Object> read() {
         List<Todo> todolist =  service.read();
@@ -29,11 +29,10 @@ public class TodoController {
 
         if(!todolist.isEmpty()) {
             res.put("message","정상적으로 요청되었습니다.");
-            res.put("todos",todolist);
         } else {
             res.put("message","리스트 없어요");
         }
-
+        res.put("todos",todolist);
         return res;
     }
 
