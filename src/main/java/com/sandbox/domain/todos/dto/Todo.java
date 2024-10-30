@@ -15,10 +15,10 @@ public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    int id;
+    private int id;
 
-    String content;
-    boolean completed;
+    private String content;
+    private boolean completed;
 
     /*
      * 미리 테스트 데이터 넣어둘래!!
