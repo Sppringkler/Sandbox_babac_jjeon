@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class TodoRepository {
+
     @PersistenceContext
     private final EntityManager em;
 
