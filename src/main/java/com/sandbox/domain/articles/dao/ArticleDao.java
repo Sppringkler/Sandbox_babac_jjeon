@@ -4,6 +4,7 @@ import com.sandbox.domain.articles.dto.Article;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ArticleDao {
     @PersistenceContext
     private final EntityManager em;
@@ -26,7 +28,16 @@ public class ArticleDao {
         }
     }
 
-    public List<Article> getArticleList() {
+    public List<Article> getOffsetList() {
         return em.createQuery("select article from Article article ",Article.class).getResultList();
+    }
+
+    public List<Article> getCursorList(int size, int cursorId) {
+        return em.createQuery("select article from Article  article "
+                                + "where article.id between  :cursorId and :lastId "
+                                + "order by article.id", Article.class)
+                .setParameter("cursorId", cursorId)
+                .setParameter("lastId", cursorId + size)
+                .getResultList();
     }
 }

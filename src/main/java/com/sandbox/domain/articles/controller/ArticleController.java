@@ -29,10 +29,17 @@ public class ArticleController {
     @GetMapping("/paging/offset")
     public ResponseEntity getOffsetPage(
             @RequestParam("size") int size, @RequestParam ("page") int page) {
+
         Map<String, Object> res = service.getOffsetPage(size,page);
 
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/paging/cursor")
+    public ResponseEntity getCursorPage(@RequestParam("size") int size, @RequestParam("cursorId") int cursorId) {
+        Map<String,Object> res = service.getCursorPage(size, cursorId);
+        return ResponseEntity.ok(res);
+
+    }
 
 }
