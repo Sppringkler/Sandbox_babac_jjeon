@@ -9,8 +9,7 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@ToString
 public class ArticleList {
-    List<Article> articles;
+    private List<Article> articles;
 
 }

@@ -2,6 +2,9 @@ package com.sandbox.domain.articles.service;
 
 import com.sandbox.domain.articles.dao.ArticleDao;
 import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.dto.ArticleCursorResp;
+import com.sandbox.domain.articles.dto.ArticleList;
+import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,54 +19,37 @@ public class ArticleServiceImpl implements  ArticleService {
     private final ArticleDao dao;
 
     @Override
-    public void makeArticleList(List<Article> articleList) {
-        dao.makeArticleList(articleList);
+    public void makeArticleList(ArticleList articleList) {
+
+        dao.makeArticleList(articleList.getArticles());
     }
 
 
     @Override
-    public Map<String, Object> getOffsetPage(int size, int page) {
-        Map<String, Object> map = new HashMap<>();
-        int startNum = page-1;
+    public ArticleOffsetResp getOffsetPage(int size, int page) {
+
+        int startNum = page - 1;
         List<Article> totalArticles = dao.getOffsetList(); //dao에서 리스트 가져오기
 
         int totalSize = totalArticles.size();
-        int fromIdx = startNum*size;
+        int fromIdx = startNum * size;
 
+        //fromIdx가 리스트 크기보다 크거나 같으면 빈 리스트 반환하기!
         if(fromIdx>=totalSize) {
-            map.put("totalPage",0);
-            map.put("articles",List.of());
-            return map;
+            return new ArticleOffsetResp(0,List.of());
         }
 
-        List<Article> subArticles = totalArticles.subList(fromIdx,startNum*size+size);
-        map.put("totalPage", totalArticles.size()/size);
-        map.put("articles", subArticles);
+        List<Article> subArticles = totalArticles.subList(fromIdx, startNum * size + size);
 
-        return map;
+        return new ArticleOffsetResp(totalArticles.size() / size, subArticles);
     }
 
     @Override
-    public Map<String, Object> getCursorPage(int size, int cursorId) {
-        Map<String, Object> map = new HashMap<>();
+    public ArticleCursorResp getCursorPage(int size, int cursorId) {
         List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
-        System.out.println("====================");
-        for(Article a : articleList) {
-            System.out.println(a);
-        }
 
-        if(articleList.isEmpty()) {
-            map.put("lastId",null);
-            map.put("articles",articleList);
-            return map;
+        int lastId = articleList.isEmpty() ? null : articleList.get(articleList.size() - 1).getId();
 
-        }
-
-        map.put("lastId",articleList.get(articleList.size() - 1).getId());
-        map.put("articles",articleList);
-
-        return map;
+        return new ArticleCursorResp(lastId, articleList);
     }
-
-
 }
