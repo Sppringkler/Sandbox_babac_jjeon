@@ -3,8 +3,10 @@ package com.sandbox.domain.articles.controller;
 import com.sandbox.domain.articles.dto.Article;
 import com.sandbox.domain.articles.dto.ArticleCursorResp;
 import com.sandbox.domain.articles.dto.ArticleList;
+import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import com.sandbox.domain.articles.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +29,14 @@ public class ArticleController {
     }
 
     @GetMapping("/paging/offset")
-    public ResponseEntity getOffsetPage(
+    public ResponseEntity<ArticleOffsetResp> getOffsetPage(
             @RequestParam("size") int size, @RequestParam ("page") int page) {
 
-        Map<String, Object> res = service.getOffsetPage(size,page);
+        ArticleOffsetResp res = service.getOffsetPage(size,page);
+
+        if (res == null || res.getArticles() == null) {
+            return ResponseEntity.status(202).body(res);
+        }
 
         return ResponseEntity.ok(res);
     }

@@ -2,6 +2,7 @@ package com.sandbox.domain.articles.service;
 
 import com.sandbox.domain.articles.dao.ArticleDao;
 import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,25 +23,20 @@ public class ArticleServiceImpl implements  ArticleService {
 
 
     @Override
-    public Map<String, Object> getOffsetPage(int size, int page) {
-        Map<String, Object> map = new HashMap<>();
+    public ArticleOffsetResp getOffsetPage(int size, int page) {
         int startNum = page-1;
         List<Article> totalArticles = dao.getOffsetList(); //dao에서 리스트 가져오기
 
         int totalSize = totalArticles.size();
         int fromIdx = startNum*size;
 
-        if(fromIdx>=totalSize) {
-            map.put("totalPage",0);
-            map.put("articles",List.of());
-            return map;
+        if(fromIdx >= totalSize) {
+            return new ArticleOffsetResp(0,List.of());
         }
 
         List<Article> subArticles = totalArticles.subList(fromIdx,startNum*size+size);
-        map.put("totalPage", totalArticles.size()/size);
-        map.put("articles", subArticles);
 
-        return map;
+        return new ArticleOffsetResp(totalArticles.size()/size, subArticles);
     }
 
     @Override
