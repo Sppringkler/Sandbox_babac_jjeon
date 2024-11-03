@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleOffsetResp {
-    private Integer totalPage;
+    private int totalPage;
     private List<Article> articleList;
 }

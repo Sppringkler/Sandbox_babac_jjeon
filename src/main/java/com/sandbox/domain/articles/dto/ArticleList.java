@@ -11,4 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ArticleList {
     private List<Article> articles;
+
 }

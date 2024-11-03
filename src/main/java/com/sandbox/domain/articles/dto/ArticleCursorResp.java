@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleCursorResp {
-    private Integer lastId; //null값 리턴하기 위해서 Integer로 형 바꿈!
+    private int lastId;
     private List<Article> articleList;
+
 }
