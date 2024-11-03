@@ -19,9 +19,8 @@ public class ArticleController {
     private final ArticleService service;
 
     @PostMapping("/make")
-    public ResponseEntity<String> makeArticle(@RequestBody ArticleList articleResp) {
-        List<Article> articleList = articleResp.getArticles();
-        service.makeArticleList(articleList);
+    public ResponseEntity<String> makeArticle(@RequestBody ArticleList articleList) {
+        service.makeArticleList(articleList.getArticles());
         return ResponseEntity.ok("article리스트 생성 완료");
     }
 
