@@ -16,6 +16,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements  ArticleService {
+
     private final ArticleDao dao;
 
     @Override
@@ -35,8 +36,8 @@ public class ArticleServiceImpl implements  ArticleService {
         int fromIdx = startNum * size;
 
         //fromIdx가 리스트 크기보다 크거나 같으면 빈 리스트 반환하기!
-        if(fromIdx>=totalSize) {
-            return new ArticleOffsetResp(0,List.of());
+        if(fromIdx >= totalSize) {
+            return new ArticleOffsetResp(null, List.of());
         }
 
         List<Article> subArticles = totalArticles.subList(fromIdx, startNum * size + size);
@@ -47,8 +48,11 @@ public class ArticleServiceImpl implements  ArticleService {
     @Override
     public ArticleCursorResp getCursorPage(int size, int cursorId) {
         List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
+        Integer lastId = null;
 
-        int lastId = articleList.isEmpty() ? null : articleList.get(articleList.size() - 1).getId();
+        if(!articleList.isEmpty()) {
+            lastId = articleList.get(articleList.size() - 1).getId();
+        }
 
         return new ArticleCursorResp(lastId, articleList);
     }

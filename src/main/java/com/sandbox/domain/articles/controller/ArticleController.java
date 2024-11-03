@@ -31,7 +31,7 @@ public class ArticleController {
             @RequestParam("size") int size,
             @RequestParam ("page") int page) {
 
-        ArticleOffsetResp res = service.getOffsetPage(size,page);
+        ArticleOffsetResp res = service.getOffsetPage(size, page);
 
         return ResponseEntity.ok(res);
     }
