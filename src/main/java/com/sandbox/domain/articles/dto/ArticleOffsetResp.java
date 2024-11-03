@@ -7,8 +7,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ArticleOffsetResp {
-    private int totalPage;
+    private Integer totalPage;
     private List<Article> articles;
 }

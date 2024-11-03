@@ -7,7 +7,6 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ArticleList {
     private List<Article> articles;
 

@@ -6,13 +6,10 @@ import com.sandbox.domain.articles.dto.ArticleList;
 import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import com.sandbox.domain.articles.service.ArticleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("articles")
@@ -30,7 +27,8 @@ public class ArticleController {
 
     @GetMapping("/paging/offset")
     public ResponseEntity<ArticleOffsetResp> getOffsetPage(
-            @RequestParam("size") int size, @RequestParam ("page") int page) {
+            @RequestParam("size") int size,
+            @RequestParam ("page") int page) {
 
         ArticleOffsetResp res = service.getOffsetPage(size,page);
 
@@ -42,10 +40,16 @@ public class ArticleController {
     }
 
     @GetMapping("/paging/cursor")
-    public ResponseEntity getCursorPage(@RequestParam("size") int size, @RequestParam("cursorId") int cursorId) {
-        Map<String,Object> res = service.getCursorPage(size, cursorId);
+    public ResponseEntity<ArticleCursorResp> getCursorPage(
+            @RequestParam("size") int size,
+            @RequestParam("cursorId") int cursorId) {
+
+        ArticleCursorResp res = service.getCursorPage(size, cursorId);
+
+        if (res == null || res.getArticles() == null) {
+            return ResponseEntity.status(202).body(res);
+        }
+
         return ResponseEntity.ok(res);
-
     }
-
 }
