@@ -1,62 +1,50 @@
 package com.sandbox.domain.articles.service;
 
-import com.sandbox.domain.articles.dao.ArticleRepository;
+import com.sandbox.domain.articles.dao.ArticleDao;
 import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.dto.ArticleCursorResp;
+import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl implements ArticleService {
-    private final ArticleRepository ar;
+public class ArticleServiceImpl implements  ArticleService {
+    private final ArticleDao dao;
 
     @Override
-    public boolean makeArticles(List<Article> list) {
-        try {
-            ar.makeArticles(list);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public void makeArticleList(List<Article> articleList) {
+        dao.makeArticleList(articleList);
+    }
+
+
+    @Override
+    public ArticleOffsetResp getOffsetPage(int size, int page) {
+        int startNum = page-1;
+        List<Article> totalArticles = dao.getOffsetList(); //dao에서 리스트 가져오기
+
+        int totalSize = totalArticles.size();
+        int fromIdx = startNum*size;
+
+        if(fromIdx >= totalSize) {
+            return new ArticleOffsetResp(null, List.of());
         }
-        return true;
+
+        List<Article> subArticles = totalArticles.subList(fromIdx, fromIdx + size);
+
+        return new ArticleOffsetResp(totalArticles.size() / size, subArticles);
     }
 
     @Override
-    public Map<String, Object> getPagingArticles(int size, int page) {
-        List<Article> list = ar.getArticles();
-        Map<String, Object> map = new HashMap<>();
+    public ArticleCursorResp getCursorPage(int size, int cursorId) {
+        List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
 
-        int idx = page-1;
-
-        try{
-            map.put("totalPage", list.size()/size);
-            map.put("articles", list.subList(idx*size, idx*size+size));
-        }catch (Exception e) {
-            return null;
+        if(articleList.isEmpty()) {
+            return new ArticleCursorResp(null, articleList);
         }
 
-        return map;
-
-    }
-
-    @Override
-    public Map<String, Object> getCursorArticles(int size,int cursorId) {
-        List<Article> list = ar.getArticlesWithCursor(size, cursorId);
-        Integer lastid = list.isEmpty() ? null : list.get(list.size()-1).getId();
-
-        Map<String, Object> map = new HashMap<>();
-
-        try{
-            map.put("lastId", lastid);
-            map.put("articles", list);
-        }catch (Exception e) {
-            return null;
-        }
-
-        return map;
+        return new ArticleCursorResp(articleList.get(articleList.size() - 1).getId(), articleList);
     }
 }

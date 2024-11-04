@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleCursorResp {
-    int lastId;
-    List<Article> articles;
+    private Integer lastId;
+    private List<Article> articles;
 }

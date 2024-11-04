@@ -1,55 +1,55 @@
 package com.sandbox.domain.articles.controller;
 
-import com.sandbox.domain.articles.dao.ArticleRepository;
 import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.dto.ArticleCursorResp;
 import com.sandbox.domain.articles.dto.ArticleList;
-import com.sandbox.domain.articles.service.ArticleServiceImpl;
+import com.sandbox.domain.articles.dto.ArticleOffsetResp;
+import com.sandbox.domain.articles.service.ArticleService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@CrossOrigin("*")
-@RequestMapping("/articles")
+@RequestMapping("articles")
+@CrossOrigin(origins = "https://ssafysandbox.vercel.app")
 @RequiredArgsConstructor
 public class ArticleController {
-    private final ArticleServiceImpl as;
+    private final ArticleService service;
+
+    @PostMapping("/make")
+    public ResponseEntity<String> makeArticle(@RequestBody ArticleList articleList) {
+        service.makeArticleList(articleList.getArticles());
+        return ResponseEntity.ok("article리스트 생성 완료");
+    }
 
     @GetMapping("/paging/offset")
-    public ResponseEntity getPagingArticles(@RequestParam("page") int page,@RequestParam("size") int size){
-        Map<String, Object> map = as.getPagingArticles(size, page);
+    public ResponseEntity<ArticleOffsetResp> getOffsetPage(
+            @RequestParam("size") int size,
+            @RequestParam ("page") int page) {
 
-        if(map != null){
-            return ResponseEntity.ok(map);
-        }else{
-            return ResponseEntity.noContent().build();
+        ArticleOffsetResp res = service.getOffsetPage(size,page);
+
+        if (res == null || res.getArticles() == null) {
+            return ResponseEntity.status(202).body(res);
         }
+
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("/paging/cursor")
-    public ResponseEntity getCursorArticles(@RequestParam("cursorId") int cursorId,@RequestParam("size") int size){
-        Map<String, Object> map = as.getCursorArticles(size, cursorId);
-        System.out.println("===============================");
-        System.out.println(cursorId);
-        System.out.println(size);
+    public ResponseEntity<ArticleCursorResp> getCursorPage(
+            @RequestParam("size") int size,
+            @RequestParam("cursorId") int cursorId) {
 
-        if(map != null){
-            return ResponseEntity.ok(map);
-        }else{
-            return ResponseEntity.noContent().build();
+        ArticleCursorResp res = service.getCursorPage(size, cursorId);
+
+        if (res == null || res.getArticles() == null) {
+            return ResponseEntity.status(202).body(res);
         }
-    }
 
-    @PostMapping("/make")
-    public ResponseEntity makeArticle(@RequestBody ArticleList list){
-
-        if(as.makeArticles(list.getArticles())){
-            return ResponseEntity.ok().build();
-        }else{
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(res);
     }
 }

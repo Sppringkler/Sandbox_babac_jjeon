@@ -1,23 +1,22 @@
 package com.sandbox.domain.articles.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Article {
-    @Id @GeneratedValue
-    int id;
-
-    String title;
-    String createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
 
+    private String title;
+
+    private Instant createdAt; //지금 샌드박스에 있는 시간 형식!
 }
