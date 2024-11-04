@@ -32,9 +32,9 @@ public class ArticleServiceImpl implements  ArticleService {
             return new ArticleOffsetResp(null, List.of());
         }
 
-        List<Article> subArticles = totalArticles.subList(fromIdx,startNum*size+size);
+        List<Article> subArticles = totalArticles.subList(fromIdx, fromIdx + size);
 
-        return new ArticleOffsetResp(totalArticles.size()/size, subArticles);
+        return new ArticleOffsetResp(totalArticles.size() / size, subArticles);
     }
 
     @Override
