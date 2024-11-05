@@ -19,7 +19,6 @@ public class ArticleServiceImpl implements ArticleService {
         try {
             ar.makeArticles(list);
         }catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
         return true;
