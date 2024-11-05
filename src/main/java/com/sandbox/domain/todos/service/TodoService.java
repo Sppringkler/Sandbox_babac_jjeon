@@ -1,15 +1,14 @@
 package com.sandbox.domain.todos.service;
 
-import com.sandbox.domain.todos.dto.Todo;
-
-import java.util.List;
+import com.sandbox.domain.todos.dto.TodoResp;
+import com.sandbox.domain.todos.dto.TodoReq;
 
 public interface TodoService {
-    List<Todo> getTodos();
+    TodoResp getTodos();
 
     void deleteTodo(int todoId);
 
     void updateTodo(int todoId);
 
-    void createTodo(Todo todo);
+    void createTodo(TodoReq todo);
 }
