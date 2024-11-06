@@ -1,9 +1,7 @@
 package com.sandbox.domain.todos.service;
 
 import com.sandbox.domain.todos.dao.TodoRepository;
-import com.sandbox.domain.todos.dto.ErrorTodoResp;
-import com.sandbox.domain.todos.dto.ReadTodoListResp;
-import com.sandbox.domain.todos.dto.ReadTodoResp;
+import com.sandbox.domain.todos.dto.*;
 import com.sandbox.domain.todos.entity.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,17 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public SuccessTodoResp createTodo(CreateTodoReq req) {
+        //입력형식을 todo객체로 매핑
+        Todo todo = new Todo();
+        todo.setContent(req.getContent());
+        todo.setCompleted(false);
+
+        if(tr.createTodo(todo)<=0) throw new ErrorTodoResp("데이터가 추가되지 않았습니다.");
+        return new SuccessTodoResp("데이터가 추가되었습니다.");
+    }
+
+    @Override
     public void deleteTodo(int todoId) {
         tr.deleteTodo(todoId);
     }
@@ -42,8 +51,4 @@ public class TodoServiceImpl implements TodoService {
         tr.updateTodo(todo);
     }
 
-    @Override
-    public void createTodo(Todo todo) {
-        tr.createTodo(todo);
-    }
 }

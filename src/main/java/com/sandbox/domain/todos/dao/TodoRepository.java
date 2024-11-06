@@ -21,8 +21,9 @@ public class TodoRepository {
         return em.createQuery("select todo from Todo todo", Todo.class).getResultList();
     }
 
-    public void createTodo(Todo todo) {
+    public int createTodo(Todo todo) {
         em.persist(todo);
+        return todo.getId();
     }
 
     public void updateTodo(Todo todo) {

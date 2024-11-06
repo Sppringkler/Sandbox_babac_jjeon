@@ -1,6 +1,8 @@
 package com.sandbox.domain.todos.service;
 
+import com.sandbox.domain.todos.dto.CreateTodoReq;
 import com.sandbox.domain.todos.dto.ReadTodoResp;
+import com.sandbox.domain.todos.dto.SuccessTodoResp;
 import com.sandbox.domain.todos.entity.Todo;
 
 public interface TodoService {
@@ -10,5 +12,5 @@ public interface TodoService {
 
     void updateTodo(int todoId);
 
-    void createTodo(Todo todo);
+    SuccessTodoResp createTodo(CreateTodoReq req);
 }

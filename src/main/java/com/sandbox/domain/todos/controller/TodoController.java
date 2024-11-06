@@ -1,5 +1,7 @@
 package com.sandbox.domain.todos.controller;
 
+import com.sandbox.domain.todos.dto.CreateTodoReq;
+import com.sandbox.domain.todos.dto.SuccessTodoResp;
 import com.sandbox.domain.todos.entity.Todo;
 import com.sandbox.domain.todos.dto.ReadTodoResp;
 import com.sandbox.domain.todos.service.TodoService;
@@ -24,10 +26,9 @@ public class TodoController {
 
     /* 할일 추가 */
     @PostMapping
-    public ResponseEntity<String> createTodo(@RequestBody Todo todo) {
-        todo.setCompleted(false);
-        todoService.createTodo(todo);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> createTodo(@RequestBody CreateTodoReq req) {
+        SuccessTodoResp resp = todoService.createTodo(req);
+        return ResponseEntity.ok(resp);
     }
 
     /* 할일 수정 */
