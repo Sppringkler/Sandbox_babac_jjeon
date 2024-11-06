@@ -1,6 +1,5 @@
 package com.sandbox.domain.todos.dao;
 
-import com.sandbox.domain.todos.dto.ReadTodoListResp;
 import com.sandbox.domain.todos.entity.Todo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
