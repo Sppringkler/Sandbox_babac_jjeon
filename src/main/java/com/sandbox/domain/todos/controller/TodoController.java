@@ -2,7 +2,6 @@ package com.sandbox.domain.todos.controller;
 
 import com.sandbox.domain.todos.dto.CreateTodoReq;
 import com.sandbox.domain.todos.dto.SuccessTodoResp;
-import com.sandbox.domain.todos.entity.Todo;
 import com.sandbox.domain.todos.dto.ReadTodoResp;
 import com.sandbox.domain.todos.service.TodoService;
 import lombok.RequiredArgsConstructor;
