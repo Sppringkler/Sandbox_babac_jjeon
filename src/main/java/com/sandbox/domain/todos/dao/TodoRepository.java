@@ -18,7 +18,7 @@ public class TodoRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    public void createTodo(TodoReq todo) {
+    public void createTodo(Todo todo) {
         em.persist(todo);
     }
 
