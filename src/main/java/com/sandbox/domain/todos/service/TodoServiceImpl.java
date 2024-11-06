@@ -32,11 +32,13 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void updateTodo(int todoId) {
         Todo todo = tr.getTodoById(todoId);
-        todo.setCompleted(true);
+        todo.setCompleted(!todo.isCompleted());
     }
 
     @Override
-    public void createTodo(TodoReq todo) {
+    public void createTodo(TodoReq req) {
+        Todo todo = new Todo();
+        todo.setContent(req.getContent());
         tr.createTodo(todo);
     }
 }
