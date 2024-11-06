@@ -33,9 +33,9 @@ public class TodoController {
 
     /* 할일 수정 */
     @PatchMapping("/{todoId}")
-    public ResponseEntity<String> updateTodo(@PathVariable("todoId") int todoId) {
-        todoService.updateTodo(todoId);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> updateTodo(@PathVariable("todoId") int todoId) {
+        SuccessTodoResp resp = todoService.updateTodo(todoId);
+        return ResponseEntity.ok(resp);
     }
 
     /* 할일 삭제 */

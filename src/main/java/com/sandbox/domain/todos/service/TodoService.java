@@ -8,9 +8,9 @@ import com.sandbox.domain.todos.entity.Todo;
 public interface TodoService {
     ReadTodoResp getTodos();
 
-    void deleteTodo(int todoId);
+    SuccessTodoResp deleteTodo(int todoId);
 
-    void updateTodo(int todoId);
+    SuccessTodoResp updateTodo(int todoId);
 
     SuccessTodoResp createTodo(CreateTodoReq req);
 }
