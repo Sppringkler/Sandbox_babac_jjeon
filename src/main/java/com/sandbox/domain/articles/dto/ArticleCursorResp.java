@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleCursorResp {
-    private int lastId;
-    private List<Article> articleList;
-
+    private Integer lastId;
+    private List<Article> articles;
 }

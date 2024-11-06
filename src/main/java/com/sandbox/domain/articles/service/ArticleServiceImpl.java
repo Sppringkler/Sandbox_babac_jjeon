@@ -3,15 +3,11 @@ package com.sandbox.domain.articles.service;
 import com.sandbox.domain.articles.dao.ArticleDao;
 import com.sandbox.domain.articles.dto.Article;
 import com.sandbox.domain.articles.dto.ArticleCursorResp;
-import com.sandbox.domain.articles.dto.ArticleList;
 import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,27 +15,24 @@ public class ArticleServiceImpl implements  ArticleService {
     private final ArticleDao dao;
 
     @Override
-    public void makeArticleList(ArticleList articleList) {
-
-        dao.makeArticleList(articleList.getArticles());
+    public void makeArticleList(List<Article> articleList) {
+        dao.makeArticleList(articleList);
     }
 
 
     @Override
     public ArticleOffsetResp getOffsetPage(int size, int page) {
-
-        int startNum = page - 1;
+        int startNum = page-1;
         List<Article> totalArticles = dao.getOffsetList(); //dao에서 리스트 가져오기
 
         int totalSize = totalArticles.size();
-        int fromIdx = startNum * size;
+        int fromIdx = startNum*size;
 
-        //fromIdx가 리스트 크기보다 크거나 같으면 빈 리스트 반환하기!
-        if(fromIdx>=totalSize) {
-            return new ArticleOffsetResp(0,List.of());
+        if(fromIdx >= totalSize) {
+            return new ArticleOffsetResp(null, List.of());
         }
 
-        List<Article> subArticles = totalArticles.subList(fromIdx, startNum * size + size);
+        List<Article> subArticles = totalArticles.subList(fromIdx, fromIdx + size);
 
         return new ArticleOffsetResp(totalArticles.size() / size, subArticles);
     }
@@ -48,8 +41,10 @@ public class ArticleServiceImpl implements  ArticleService {
     public ArticleCursorResp getCursorPage(int size, int cursorId) {
         List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
 
-        int lastId = articleList.isEmpty() ? null : articleList.get(articleList.size() - 1).getId();
+        if(articleList.isEmpty()) {
+            return new ArticleCursorResp(null, articleList);
+        }
 
-        return new ArticleCursorResp(lastId, articleList);
+        return new ArticleCursorResp(articleList.get(articleList.size() - 1).getId(), articleList);
     }
 }

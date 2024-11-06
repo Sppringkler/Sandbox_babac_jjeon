@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
