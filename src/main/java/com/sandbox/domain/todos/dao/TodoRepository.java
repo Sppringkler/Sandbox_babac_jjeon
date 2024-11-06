@@ -1,6 +1,7 @@
 package com.sandbox.domain.todos.dao;
 
-import com.sandbox.domain.todos.dto.Todo;
+import com.sandbox.domain.todos.dto.ReadTodoListResp;
+import com.sandbox.domain.todos.entity.Todo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,12 @@ public class TodoRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    public void createTodo(Todo todo) {
-        em.persist(todo);
-    }
-
     public List<Todo> getTodos() {
         return em.createQuery("select todo from Todo todo", Todo.class).getResultList();
+    }
+
+    public void createTodo(Todo todo) {
+        em.persist(todo);
     }
 
     public void updateTodo(Todo todo) {

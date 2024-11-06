@@ -1,4 +1,4 @@
-package com.sandbox.domain.todos.dto;
+package com.sandbox.domain.todos.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,19 +12,10 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class Todo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private int id;
 
     private String content;
     private boolean completed;
-
-    /*
-     * 미리 테스트 데이터 넣어둘래!!
-     * */
-    public Todo(String content, boolean completed) {
-        this.content = content;
-        this.completed = completed;
-    }
 }
