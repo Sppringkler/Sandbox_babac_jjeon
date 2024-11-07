@@ -1,6 +1,6 @@
-package com.sandbox.domain.articles.dao;
+package com.sandbox.domain.articles.repository;
 
-import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.entity.Article;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Transactional
-public class ArticleDao {
+public class ArticleRepository {
     @PersistenceContext
     private final EntityManager em;
 
