@@ -3,6 +3,8 @@ package com.sandbox.domain.todos.service;
 import com.sandbox.domain.todos.dao.TodoRepository;
 import com.sandbox.domain.todos.dto.*;
 import com.sandbox.domain.todos.entity.Todo;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,11 +42,12 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    @Transactional
     public SuccessTodoResp updateTodo(int todoId) {
         Todo todo = Optional.ofNullable(tr.getTodoById(todoId))
                 .orElseThrow(() -> new ErrorTodoResp("수정이 실패했습니다."));
 
-        tr.updateTodo(todo);
+        todo.setCompleted(!todo.isCompleted());
 
         return new SuccessTodoResp("수정을 완료했습니다.");
     }

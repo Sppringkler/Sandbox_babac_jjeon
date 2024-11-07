@@ -26,11 +26,6 @@ public class TodoRepository {
         return todo.getId();
     }
 
-    public void updateTodo(Todo todo) {
-        todo.setCompleted(!todo.isCompleted());
-        em.merge(todo);
-    }
-
     public void deleteTodo(Todo todo) {
         em.remove(todo);
     }
