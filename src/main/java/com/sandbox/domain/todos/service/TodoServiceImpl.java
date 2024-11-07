@@ -4,6 +4,7 @@ import com.sandbox.domain.todos.dao.TodoRepository;
 import com.sandbox.domain.todos.dto.*;
 import com.sandbox.domain.todos.entity.Todo;
 
+import com.sandbox.domain.todos.exception.ErrorTodoResp;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

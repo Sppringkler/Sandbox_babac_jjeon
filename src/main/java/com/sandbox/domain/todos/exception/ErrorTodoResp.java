@@ -1,4 +1,4 @@
-package com.sandbox.domain.todos.dto;
+package com.sandbox.domain.todos.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
