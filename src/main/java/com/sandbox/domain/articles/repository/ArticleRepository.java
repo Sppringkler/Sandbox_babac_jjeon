@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,8 +28,23 @@ public class ArticleRepository {
         }
     }
 
-    public List<Article> getOffsetList() {
-        return em.createQuery("select article from Article article", Article.class).getResultList();
+    public Map<String, Object> getOffsetList(int size, int page) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<Article> list =  em.createQuery("select article from Article article", Article.class)
+                .setFirstResult(size * page) // 시작 위치
+                .setMaxResults(size)          // 가져올 데이터 수
+                .getResultList();
+
+        Long totalSize = em.createQuery("select count(article) from Article article", Long.class)
+                .getSingleResult();
+
+        int pageSize = totalSize.intValue() / size;
+
+        map.put("list", list);
+        map.put("size", pageSize);
+
+        return map;
     }
 
     public List<Article> getCursorList(int size, int cursorId) {
