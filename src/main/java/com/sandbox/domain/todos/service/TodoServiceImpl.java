@@ -35,7 +35,6 @@ public class TodoServiceImpl implements TodoService {
         //입력형식을 todo객체로 매핑
         Todo todo = new Todo();
         todo.setContent(req.getContent());
-        todo.setCompleted(false);
 
         if(tr.createTodo(todo)<=0) throw new ErrorTodoResp("데이터가 추가되지 않았습니다.");
         return new SuccessTodoResp("데이터가 추가되었습니다.");
