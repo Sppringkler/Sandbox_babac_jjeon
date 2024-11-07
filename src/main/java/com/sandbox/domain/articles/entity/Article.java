@@ -17,5 +17,5 @@ public class Article {
 
     private String title;
 
-    private String createdAt; //지금 샌드박스에 있는 시간 형식!
+    private String createdAt;
 }
