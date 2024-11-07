@@ -1,10 +1,10 @@
 package com.sandbox.domain.todos.controller;
 
-import com.sandbox.domain.todos.dto.TodoReq;
-import com.sandbox.domain.todos.dto.TodoResp;
+import com.sandbox.domain.todos.dto.CreateTodoReq;
+import com.sandbox.domain.todos.dto.SuccessTodoResp;
+import com.sandbox.domain.todos.dto.ReadTodoResp;
 import com.sandbox.domain.todos.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,33 +18,29 @@ public class TodoController {
 
     /* 리스트 전체 읽기 */
     @GetMapping
-    public ResponseEntity<TodoResp> getTodos() {
-        TodoResp resp = todoService.getTodos();
-        if (resp.getTodos().isEmpty()) {
-            // 데이터가 없으면 202 상태 코드로 반환하기
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(resp);
-        }
+    public ResponseEntity<ReadTodoResp> getTodos() {
+        ReadTodoResp resp = todoService.getTodos();
         return ResponseEntity.ok(resp);
     }
 
     /* 할일 추가 */
     @PostMapping
-    public ResponseEntity<String> createTodo(@RequestBody TodoReq todo) {
-        todoService.createTodo(todo);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> createTodo(@RequestBody CreateTodoReq req) {
+        SuccessTodoResp resp = todoService.createTodo(req);
+        return ResponseEntity.ok(resp);
     }
 
     /* 할일 수정 */
     @PatchMapping("/{todoId}")
-    public ResponseEntity<String> updateTodo(@PathVariable("todoId") int todoId) {
-        todoService.updateTodo(todoId);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> updateTodo(@PathVariable("todoId") int todoId) {
+        SuccessTodoResp resp = todoService.updateTodo(todoId);
+        return ResponseEntity.ok(resp);
     }
 
     /* 할일 삭제 */
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<String> deleteTodo(@PathVariable("todoId") int todoId) {
-        todoService.deleteTodo(todoId);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> deleteTodo(@PathVariable("todoId") int todoId) {
+        SuccessTodoResp resp = todoService.deleteTodo(todoId);
+        return ResponseEntity.ok(resp);
     }
 }
