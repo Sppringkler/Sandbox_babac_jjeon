@@ -1,6 +1,6 @@
 package com.sandbox.domain.articles.dao;
 
-import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.entity.Article;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

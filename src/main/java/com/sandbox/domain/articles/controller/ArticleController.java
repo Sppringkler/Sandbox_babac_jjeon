@@ -27,10 +27,6 @@ public class ArticleController {
             @RequestParam("size") int size,
             @RequestParam ("page") int page) {
         ArticleOffsetResp res = service.getOffsetPage(size,page);
-        if (res == null || res.getArticles() == null) {
-            return ResponseEntity.status(202).body(res);
-        }
-
         return ResponseEntity.ok(res);
     }
 
@@ -40,11 +36,6 @@ public class ArticleController {
             @RequestParam("cursorId") int cursorId) {
 
         ArticleCursorResp res = service.getCursorPage(size, cursorId);
-
-        if (res == null || res.getArticles() == null) {
-            return ResponseEntity.status(202).body(res);
-        }
-
         return ResponseEntity.ok(res);
     }
 }
