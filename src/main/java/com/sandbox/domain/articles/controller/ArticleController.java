@@ -26,9 +26,7 @@ public class ArticleController {
     public ResponseEntity<ArticleOffsetResp> getOffsetPage(
             @RequestParam("size") int size,
             @RequestParam ("page") int page) {
-
         ArticleOffsetResp res = service.getOffsetPage(size,page);
-
         if (res == null || res.getArticles() == null) {
             return ResponseEntity.status(202).body(res);
         }
