@@ -1,4 +1,4 @@
-package com.sandbox.domain.todos.dto;
+package com.sandbox.domain.todos.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter @Setter
@@ -18,13 +19,6 @@ public class Todo {
     private int id;
 
     private String content;
+    @ColumnDefault("false")
     private boolean completed;
-
-    /*
-     * 미리 테스트 데이터 넣어둘래!!
-     * */
-    public Todo(String content, boolean completed) {
-        this.content = content;
-        this.completed = completed;
-    }
 }
