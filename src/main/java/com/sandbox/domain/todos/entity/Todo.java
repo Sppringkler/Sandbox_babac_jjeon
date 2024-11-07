@@ -1,4 +1,4 @@
-package com.sandbox.domain.todos.dto;
+package com.sandbox.domain.todos.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
