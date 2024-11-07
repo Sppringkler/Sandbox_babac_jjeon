@@ -1,5 +1,6 @@
 package com.sandbox.domain.articles.dto;
 
+import com.sandbox.domain.articles.entity.Article;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

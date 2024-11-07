@@ -1,7 +1,7 @@
 package com.sandbox.domain.articles.service;
 
-import com.sandbox.domain.articles.dao.ArticleDao;
-import com.sandbox.domain.articles.dto.Article;
+import com.sandbox.domain.articles.repository.ArticleRepository;
+import com.sandbox.domain.articles.entity.Article;
 import com.sandbox.domain.articles.dto.ArticleCursorResp;
 import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements  ArticleService {
-    private final ArticleDao dao;
+    private final ArticleRepository dao;
 
     @Override
     public void makeArticleList(List<Article> articleList) {

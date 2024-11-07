@@ -1,6 +1,6 @@
 package com.sandbox.domain.todos.service;
 
-import com.sandbox.domain.todos.dao.TodoRepository;
+import com.sandbox.domain.todos.repository.TodoRepository;
 import com.sandbox.domain.todos.dto.*;
 import com.sandbox.domain.todos.entity.Todo;
 
