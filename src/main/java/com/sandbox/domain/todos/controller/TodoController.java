@@ -39,8 +39,8 @@ public class TodoController {
 
     /* 할일 삭제 */
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<String> deleteTodo(@PathVariable("todoId") int todoId) {
-        todoService.deleteTodo(todoId);
-        return ResponseEntity.ok("정상적으로 처리되었습니다.");
+    public ResponseEntity<SuccessTodoResp> deleteTodo(@PathVariable("todoId") int todoId) {
+        SuccessTodoResp resp = todoService.deleteTodo(todoId);
+        return ResponseEntity.ok(resp);
     }
 }

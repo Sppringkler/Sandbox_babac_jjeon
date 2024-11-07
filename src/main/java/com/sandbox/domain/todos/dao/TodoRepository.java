@@ -31,11 +31,11 @@ public class TodoRepository {
         em.merge(todo);
     }
 
-    public Todo getTodoById(int todoId) {
-        return em.find(Todo.class, todoId);
+    public void deleteTodo(Todo todo) {
+        em.remove(todo);
     }
 
-    public void deleteTodo(int todoId) {
-        em.remove(em.find(Todo.class, todoId));
+    public Todo getTodoById(int todoId) {
+        return em.find(Todo.class, todoId);
     }
 }

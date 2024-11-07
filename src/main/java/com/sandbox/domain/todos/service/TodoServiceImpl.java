@@ -40,7 +40,6 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-//    @Transactional
     public SuccessTodoResp updateTodo(int todoId) {
         Todo todo = Optional.ofNullable(tr.getTodoById(todoId))
                 .orElseThrow(() -> new ErrorTodoResp("수정이 실패했습니다."));
@@ -52,8 +51,11 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public SuccessTodoResp deleteTodo(int todoId) {
-        tr.deleteTodo(todoId);
+        Todo todo = Optional.ofNullable(tr.getTodoById(todoId))
+            .orElseThrow(() -> new ErrorTodoResp("삭제를 실패했습니다."));
+
+        tr.deleteTodo(todo);
+
         return new SuccessTodoResp("삭제를 완료했습니다.");
     }
-
 }
