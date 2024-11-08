@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ArticleOffsetResp {
     private Integer totalPage;
-    private List<Article> articles;
+    private List<ArticleResp> articles;
 }
