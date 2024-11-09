@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleList {
-    private List<ArticleReq> articles; // List<ArticleReq>로 수정
+    private List<ArticleReq> articles;
 }

@@ -18,9 +18,9 @@ public class ArticleController {
     private final ArticleService service;
 
     @PostMapping("/make")
-    public ResponseEntity<String> makeArticle(@RequestBody ArticleList articleList) {
+    public ResponseEntity<ArticleSuccessMsgResp> makeArticle(@RequestBody ArticleList articleList) {
         ArticleSuccessMsgResp resp = service.makeArticleList(articleList.getArticles());
-        return ResponseEntity.ok("article리스트 생성 완료");
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/paging/offset")
@@ -29,18 +29,9 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
-//
-//    @GetMapping("/paging/cursor")
-//    public ResponseEntity<ArticleCursorResp> getCursorPage(
-//            @RequestParam("size") int size,
-//            @RequestParam("cursorId") int cursorId) {
-//
-//        ArticleCursorResp res = service.getCursorPage(size, cursorId);
-//
-//        if (res == null || res.getArticles() == null) {
-//            return ResponseEntity.status(202).body(res);
-//        }
-//
-//        return ResponseEntity.ok(res);
-//    }
+    @GetMapping("/paging/cursor")
+    public ResponseEntity<ArticleCursorResp> getCursorPage(@RequestParam("size") int size, @RequestParam("cursorId") int cursorId) {
+        ArticleCursorResp res = service.getCursorPage(size, cursorId);
+        return ResponseEntity.ok(res);
+    }
 }

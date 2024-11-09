@@ -1,16 +1,12 @@
 package com.sandbox.domain.articles.service;
 
-import com.sandbox.domain.articles.dto.ArticleOffsetResp;
-import com.sandbox.domain.articles.dto.ArticleReq;
-import com.sandbox.domain.articles.dto.ArticleResp;
-import com.sandbox.domain.articles.dto.ArticleSuccessMsgResp;
+import com.sandbox.domain.articles.dto.*;
 import com.sandbox.domain.articles.repository.ArticleRepository;
 import com.sandbox.domain.articles.entity.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +16,6 @@ public class ArticleServiceImpl implements  ArticleService {
 
     @Override
     public ArticleSuccessMsgResp makeArticleList(List<ArticleReq> articleList) {
-        // ArticleReq 객체를 Article 엔티티로 변환
         List<Article> articles = articleList.stream().map(
                 articleReq -> new Article(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
         ).collect(Collectors.toList());
@@ -34,11 +29,11 @@ public class ArticleServiceImpl implements  ArticleService {
     public ArticleOffsetResp getOffsetPage(int size, int page) {
         int startNum = page - 1;
 
-        // 리스트와 총 개수 조회
+        // 리스트랑 전체개수 조회
         List<Article> articles = dao.getOffsetList(size, startNum);
         int totalSize = (int) Math.ceil((double) dao.countArticles() / size);
 
-        // Article -> ArticleResp 리스트로 변환
+        // Article -> ArticleResp
         List<ArticleResp> subArticles = articles.stream()
                 .map(article -> new ArticleResp(article.getId(), article.getTitle(), article.getCreatedAt()))
                 .collect(Collectors.toList());
@@ -46,4 +41,18 @@ public class ArticleServiceImpl implements  ArticleService {
         return new ArticleOffsetResp(totalSize, subArticles);
     }
 
+    @Override
+    public ArticleCursorResp getCursorPage(int size, int cursorId) {
+        List<Article> articleList = dao.getCursorList(size, cursorId);
+
+        if (articleList.isEmpty()) {
+            return new ArticleCursorResp(null, List.of());
+        }
+
+        List<ArticleResp> articles = articleList.stream().map(
+                articleReq -> new ArticleResp(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
+        ).toList();
+
+        return new ArticleCursorResp(articleList.get(articleList.size() - 1).getId(), articles);
+    }
 }
