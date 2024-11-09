@@ -1,49 +1,28 @@
 package com.sandbox.domain.articles.service;
 
-import com.sandbox.domain.articles.dao.ArticleDao;
-import com.sandbox.domain.articles.dto.ArticleCursorResp;
-import com.sandbox.domain.articles.dto.ArticleOffsetResp;
+import com.sandbox.domain.articles.dto.ArticleReq;
+import com.sandbox.domain.articles.dto.ArticleSuccessMsgResp;
+import com.sandbox.domain.articles.repository.ArticleRepository;
+import com.sandbox.domain.articles.entity.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements  ArticleService {
-    private final ArticleDao dao;
+    private final ArticleRepository dao;
 
     @Override
-    public void makeArticleList(List<Article> articleList) {
-        dao.makeArticleList(articleList);
-    }
+    public ArticleSuccessMsgResp makeArticleList(List<ArticleReq> articleList) {
+        // ArticleReq 객체를 Article 엔티티로 변환
+        List<Article> articles = articleList.stream().map(
+                articleReq -> new Article(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
+        ).collect(Collectors.toList());
 
-
-    @Override
-    public ArticleOffsetResp getOffsetPage(int size, int page) {
-        int startNum = page-1;
-        List<Article> totalArticles = dao.getOffsetList(); //dao에서 리스트 가져오기
-
-        int totalSize = totalArticles.size();
-        int fromIdx = startNum*size;
-
-        if(fromIdx >= totalSize) {
-            return new ArticleOffsetResp(null, List.of());
-        }
-
-        List<Article> subArticles = totalArticles.subList(fromIdx, fromIdx + size);
-
-        return new ArticleOffsetResp(totalArticles.size() / size, subArticles);
-    }
-
-    @Override
-    public ArticleCursorResp getCursorPage(int size, int cursorId) {
-        List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
-
-        if(articleList.isEmpty()) {
-            return new ArticleCursorResp(null, articleList);
-        }
-
-        return new ArticleCursorResp(articleList.get(articleList.size() - 1).getId(), articleList);
+        dao.makeArticleList(articles);
+        return new ArticleSuccessMsgResp("article리스트 생성 완료");
     }
 }

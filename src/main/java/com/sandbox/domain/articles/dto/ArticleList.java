@@ -1,5 +1,6 @@
 package com.sandbox.domain.articles.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ArticleList {
-    private List<ArticleResp> articles;
+    private List<ArticleReq> articles; // List<ArticleReq>로 수정
 }

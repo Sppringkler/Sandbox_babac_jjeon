@@ -3,6 +3,7 @@ package com.sandbox.domain.articles.controller;
 import com.sandbox.domain.articles.dto.ArticleCursorResp;
 import com.sandbox.domain.articles.dto.ArticleList;
 import com.sandbox.domain.articles.dto.ArticleOffsetResp;
+import com.sandbox.domain.articles.dto.ArticleSuccessMsgResp;
 import com.sandbox.domain.articles.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,33 @@ public class ArticleController {
 
     @PostMapping("/make")
     public ResponseEntity<String> makeArticle(@RequestBody ArticleList articleList) {
-        service.makeArticleList(articleList.getArticles());
+        ArticleSuccessMsgResp resp = service.makeArticleList(articleList.getArticles());
         return ResponseEntity.ok("article리스트 생성 완료");
     }
 
-    @GetMapping("/paging/offset")
-    public ResponseEntity<ArticleOffsetResp> getOffsetPage(
-            @RequestParam("size") int size,
-            @RequestParam ("page") int page) {
-        ArticleOffsetResp res = service.getOffsetPage(size,page);
-        if (res == null || res.getArticles() == null) {
-            return ResponseEntity.status(202).body(res);
-        }
-
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping("/paging/cursor")
-    public ResponseEntity<ArticleCursorResp> getCursorPage(
-            @RequestParam("size") int size,
-            @RequestParam("cursorId") int cursorId) {
-
-        ArticleCursorResp res = service.getCursorPage(size, cursorId);
-
-        if (res == null || res.getArticles() == null) {
-            return ResponseEntity.status(202).body(res);
-        }
-
-        return ResponseEntity.ok(res);
-    }
+//    @GetMapping("/paging/offset")
+//    public ResponseEntity<ArticleOffsetResp> getOffsetPage(
+//            @RequestParam("size") int size,
+//            @RequestParam ("page") int page) {
+//        ArticleOffsetResp res = service.getOffsetPage(size,page);
+//        if (res == null || res.getArticles() == null) {
+//            return ResponseEntity.status(202).body(res);
+//        }
+//
+//        return ResponseEntity.ok(res);
+//    }
+//
+//    @GetMapping("/paging/cursor")
+//    public ResponseEntity<ArticleCursorResp> getCursorPage(
+//            @RequestParam("size") int size,
+//            @RequestParam("cursorId") int cursorId) {
+//
+//        ArticleCursorResp res = service.getCursorPage(size, cursorId);
+//
+//        if (res == null || res.getArticles() == null) {
+//            return ResponseEntity.status(202).body(res);
+//        }
+//
+//        return ResponseEntity.ok(res);
+//    }
 }
