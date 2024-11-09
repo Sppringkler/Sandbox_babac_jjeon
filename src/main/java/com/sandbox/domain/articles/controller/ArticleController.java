@@ -23,17 +23,12 @@ public class ArticleController {
         return ResponseEntity.ok("article리스트 생성 완료");
     }
 
-//    @GetMapping("/paging/offset")
-//    public ResponseEntity<ArticleOffsetResp> getOffsetPage(
-//            @RequestParam("size") int size,
-//            @RequestParam ("page") int page) {
-//        ArticleOffsetResp res = service.getOffsetPage(size,page);
-//        if (res == null || res.getArticles() == null) {
-//            return ResponseEntity.status(202).body(res);
-//        }
-//
-//        return ResponseEntity.ok(res);
-//    }
+    @GetMapping("/paging/offset")
+    public ResponseEntity<ArticleOffsetResp> getOffsetPage( @RequestParam("size") int size, @RequestParam ("page") int page) {
+        ArticleOffsetResp res = service.getOffsetPage(size,page);
+        return ResponseEntity.ok(res);
+    }
+
 //
 //    @GetMapping("/paging/cursor")
 //    public ResponseEntity<ArticleCursorResp> getCursorPage(

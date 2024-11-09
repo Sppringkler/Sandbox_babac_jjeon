@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ArticleService {
     ArticleSuccessMsgResp makeArticleList(List<ArticleReq> articleList);
-//    ArticleOffsetResp getOffsetPage(int size, int page);
+    ArticleOffsetResp getOffsetPage(int size, int page);
 //    ArticleCursorResp getCursorPage(int size, int CursorId);
 }
