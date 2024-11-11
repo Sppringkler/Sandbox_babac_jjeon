@@ -27,9 +27,12 @@ public class SMTPRepository {
         }
     }
 
-    public EmailAuthentication getEmailAuthentication(String email){
-        return em.find(EmailAuthentication.class, email);
+    public EmailAuthentication getEmailAuthentication(String email) {
+        return em.createQuery("select ea from EmailAuthentication ea where ea.email = :email", EmailAuthentication.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
+
 
     public void deleteEmailAuthentication(String email){
         em.remove(getEmailAuthentication(email));

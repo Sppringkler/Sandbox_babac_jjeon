@@ -19,8 +19,6 @@ public class SMTPController {
     @PostMapping
     public ResponseEntity<?> sendSecretNumber(@RequestBody EmailReq req){
         EmailResp resp = ss.sendSecretNumber(req);
-        System.out.println("요청이 들어옴!!!!!!!!!");
-        System.out.println(resp.isOk());
         return ResponseEntity.ok(resp);
     }
 

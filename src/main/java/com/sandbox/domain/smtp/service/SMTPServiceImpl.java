@@ -11,12 +11,14 @@ import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -40,7 +42,7 @@ public class SMTPServiceImpl implements SMTPService {
             sendMail(req.getEmail(), secretNum);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new ErrorResp("요청이 정상적으로 처리되지 않았습니다.");
         }
 
@@ -57,6 +59,7 @@ public class SMTPServiceImpl implements SMTPService {
                 return new AuthenticationResp(false);
             }
         }catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new ErrorResp("요청이 정상적으로 처리되지 않았습니다.");
         }
     }
@@ -79,6 +82,7 @@ public class SMTPServiceImpl implements SMTPService {
                     "인증을 완료해주세요!!", true);
             jms.send(msg);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new ErrorResp("메세지 작성 실패!");
         }
     }
