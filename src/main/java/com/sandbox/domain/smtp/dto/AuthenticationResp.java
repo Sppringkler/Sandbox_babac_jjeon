@@ -1,13 +1,14 @@
 package com.sandbox.domain.smtp.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailReq {
-    private String email;
+public class AuthenticationResp {
+    @JsonProperty("isSuccess")
+    private boolean isSuccess;
 }
