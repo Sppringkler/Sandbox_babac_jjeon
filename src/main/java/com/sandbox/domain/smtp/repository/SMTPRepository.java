@@ -4,20 +4,27 @@ import com.sandbox.domain.smtp.entity.EmailAuthentication;
 import com.sandbox.domain.smtp.exception.ErrorResp;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@RequiredArgsConstructor
 public class SMTPRepository {
     @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
-    public boolean createEmailAuthentication(EmailAuthentication ea){
+    @Transactional
+    public void deleteAll() {
+        em.createQuery("delete from EmailAuthentication").executeUpdate();
+    }
+
+    public void createEmailAuthentication(EmailAuthentication ea){
         try {
             em.persist(ea);
         } catch (Exception e) {
             throw new ErrorResp("인증 생성 불가");
         }
-        return true;
     }
 
     public EmailAuthentication getEmailAuthentication(String email){

@@ -7,22 +7,27 @@ import com.sandbox.domain.smtp.dto.EmailResp;
 import com.sandbox.domain.smtp.entity.EmailAuthentication;
 import com.sandbox.domain.smtp.exception.ErrorResp;
 import com.sandbox.domain.smtp.repository.SMTPRepository;
-import jakarta.mail.MessagingException;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SMTPServiceImpl implements SMTPService {
     private final SMTPRepository sr;
     private final JavaMailSender jms;
+
+    @PostConstruct
+    public void init() {
+        sr.deleteAll();
+    }
 
     @Override
     public EmailResp sendSecretNumber(EmailReq req) {
@@ -45,7 +50,7 @@ public class SMTPServiceImpl implements SMTPService {
     @Override
     public AuthenticationResp authenticate(AuthenticationReq req) {
         try {
-            if(req.getAuthentication() == sr.getEmailAuthentication(req.getEmail()).getAuthentication()){
+            if(req.getAuthentication().equals(sr.getEmailAuthentication(req.getEmail()).getAuthentication())){
                 sr.deleteEmailAuthentication(req.getEmail());
                 return new AuthenticationResp(true);
             }else{
@@ -70,7 +75,7 @@ public class SMTPServiceImpl implements SMTPService {
             MimeMessageHelper helper = new MimeMessageHelper(msg, false, "UTF-8");
             helper.setTo(email);
             helper.setSubject("sandbox 이메일 인증 비밀번호 입니다!!");
-            helper.setText("인증번호는 "+secretNum +"입니다. \n" +
+            helper.setText("인증번호는 "+secretNum +" 입니다. \n" +
                     "인증을 완료해주세요!!", true);
             jms.send(msg);
         } catch (Exception e) {
