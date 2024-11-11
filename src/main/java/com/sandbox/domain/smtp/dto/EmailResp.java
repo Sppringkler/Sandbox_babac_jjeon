@@ -3,11 +3,10 @@ package com.sandbox.domain.smtp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailReq {
-    String email;
+public class EmailResp {
+    boolean isOk;
 }

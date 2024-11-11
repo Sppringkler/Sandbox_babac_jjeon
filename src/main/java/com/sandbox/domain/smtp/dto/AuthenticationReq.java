@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailReq {
-    String email;
+public class AuthenticationReq {
+    private String authentication;
+    private String email;
 }
