@@ -1,16 +1,12 @@
 package com.sandbox.domain.articles.service;
 
-import com.sandbox.domain.articles.dto.ArticleReqAndResp;
-import com.sandbox.domain.articles.exception.ErrorArticleResp;
+import com.sandbox.domain.articles.dto.*;
 import com.sandbox.domain.articles.repository.ArticleRepository;
 import com.sandbox.domain.articles.entity.Article;
-import com.sandbox.domain.articles.dto.ArticleCursorResp;
-import com.sandbox.domain.articles.dto.ArticleOffsetResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,50 +15,42 @@ public class ArticleServiceImpl implements  ArticleService {
     private final ArticleRepository dao;
 
     @Override
-    public void makeArticleList(List<ArticleReqAndResp> articleList) {
-        // ArticleReq 객체를 Article 엔티티로 변환
+    public ArticleSuccessMsgResp makeArticleList(List<ArticleReq> articleList) {
         List<Article> articles = articleList.stream().map(
                 articleReq -> new Article(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
         ).collect(Collectors.toList());
 
         dao.makeArticleList(articles);
+        return new ArticleSuccessMsgResp("article리스트 생성 완료");
     }
-
-
 
     @Override
     public ArticleOffsetResp getOffsetPage(int size, int page) {
-        Map<String, Object> totalArticles = dao.getOffsetList(size, page-1); //dao에서 리스트 가져오기
+        int startNum = page - 1;
 
-        @SuppressWarnings("unchecked")
-        List<Article> articles = (List<Article>)totalArticles.get("list");
+        // 리스트랑 전체개수 조회
+        List<Article> articles = dao.getOffsetList(size, startNum);
+        int totalSize = (int) Math.ceil((double) dao.countArticles() / size);
 
-        List<ArticleReqAndResp> list = articles.stream().map(
-                articleReq -> new ArticleReqAndResp(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
-        ).toList();
+        // Article -> ArticleResp
+        List<ArticleResp> subArticles = articles.stream()
+                .map(article -> new ArticleResp(article.getId(), article.getTitle(), article.getCreatedAt()))
+                .collect(Collectors.toList());
 
-        int totalSize = (int)totalArticles.get("size");
-
-        ArticleOffsetResp res = new ArticleOffsetResp(totalSize, list);
-
-        if(res.getArticles() == null){
-            throw new ErrorArticleResp("정상적이지 않은 요청입니다");
-        }else{
-            return res;
-        }
+        return new ArticleOffsetResp(totalSize, subArticles);
     }
 
     @Override
     public ArticleCursorResp getCursorPage(int size, int cursorId) {
-        List<Article> articleList = dao.getCursorList(size, cursorId); //dao에서 리스트 가져오기
+        List<Article> articleList = dao.getCursorList(size, cursorId);
 
-        List<ArticleReqAndResp> articles = articleList.stream().map(
-                articleReq -> new ArticleReqAndResp(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
-        ).toList();
-
-        if(articleList.isEmpty()) {
-            return new ArticleCursorResp(null, articles);
+        if (articleList.isEmpty()) {
+            return new ArticleCursorResp(null, List.of());
         }
+
+        List<ArticleResp> articles = articleList.stream().map(
+                articleReq -> new ArticleResp(articleReq.getId(), articleReq.getTitle(), articleReq.getCreatedAt())
+        ).toList();
 
         return new ArticleCursorResp(articleList.get(articleList.size() - 1).getId(), articles);
     }

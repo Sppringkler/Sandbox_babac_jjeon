@@ -1,18 +1,13 @@
-package com.sandbox.domain.articles.entity;
+package com.sandbox.domain.articles.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ArticleReq {
     private int id;
     private String title;
     private String createdAt;
