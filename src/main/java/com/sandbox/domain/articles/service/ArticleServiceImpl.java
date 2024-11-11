@@ -24,7 +24,6 @@ public class ArticleServiceImpl implements  ArticleService {
         return new ArticleSuccessMsgResp("article리스트 생성 완료");
     }
 
-
     @Override
     public ArticleOffsetResp getOffsetPage(int size, int page) {
         int startNum = page - 1;

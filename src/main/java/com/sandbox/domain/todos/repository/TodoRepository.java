@@ -1,4 +1,4 @@
-package com.sandbox.domain.todos.dao;
+package com.sandbox.domain.todos.repository;
 
 import com.sandbox.domain.todos.entity.Todo;
 import jakarta.persistence.EntityManager;

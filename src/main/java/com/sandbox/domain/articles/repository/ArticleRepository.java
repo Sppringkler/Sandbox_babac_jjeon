@@ -47,5 +47,4 @@ public class ArticleRepository {
                 .setMaxResults(size)
                 .getResultList();
     }
-
 }
