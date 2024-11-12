@@ -17,10 +17,6 @@ public class EmailVerificationRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    public Optional<EmailVerification> findById(Long id) {
-        return Optional.ofNullable(em.find(EmailVerification.class, id));
-    }
-
     public Optional<EmailVerification> findByEmail(String email) {
         return em.createQuery("SELECT ev FROM EmailVerification ev WHERE ev.email = :email", EmailVerification.class)
                 .setParameter("email", email)

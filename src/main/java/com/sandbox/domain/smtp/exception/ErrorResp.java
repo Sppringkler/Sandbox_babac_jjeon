@@ -1,7 +1,10 @@
 package com.sandbox.domain.smtp.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class ErrorResp extends RuntimeException {
-	public ErrorResp(String message) {
-		super(message);
-	}
+	private String message;
 }
