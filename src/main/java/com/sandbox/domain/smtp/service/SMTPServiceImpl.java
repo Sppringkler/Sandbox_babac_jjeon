@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -52,12 +53,16 @@ public class SMTPServiceImpl implements SMTPService {
     @Override
     public AuthenticationResp authenticate(AuthenticationReq req) {
         try {
-            if(req.getAuthentication().equals(sr.getEmailAuthentication(req.getEmail()).getAuthentication())){
-                sr.deleteEmailAuthentication(req.getEmail());
-                return new AuthenticationResp(true);
-            }else{
-                return new AuthenticationResp(false);
+            List<EmailAuthentication> emailAuthentications = sr.getEmailAuthentications(req.getEmail());
+
+            for (EmailAuthentication ea : emailAuthentications) {
+                if(ea.getAuthentication().equals(req.getAuthentication())) {
+                    sr.deleteEmailAuthentications(ea.getEmail());
+                    return new AuthenticationResp(true);
+                }
             }
+            return new AuthenticationResp(false);
+
         }catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ErrorResp("요청이 정상적으로 처리되지 않았습니다.");
