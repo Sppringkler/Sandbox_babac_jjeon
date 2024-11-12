@@ -63,8 +63,8 @@ public class SMTPServiceImpl implements SMTPService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setTo(to);
-        helper.setSubject("인증코드입니다");
-        helper.setText("인증코드입니다 -> " + code);
+        helper.setSubject("SANDBOX _ SMTP 인증 메일");
+        helper.setText("인증코드 : " + code);
 
         mailSender.send(message);
     }
