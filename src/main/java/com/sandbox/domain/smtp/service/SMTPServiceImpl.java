@@ -35,10 +35,8 @@ public class SMTPServiceImpl implements SMTPService {
             //중복되는 값 있나 확인 (set할 경우에는 괜찮은데, 객체 만들어서 넣을거면 삭제 필요)
             Optional<EmailAuthentication> entity = repo.findByEmail(req.getEmail());
 
-            if (entity.isPresent()) {
-                //중복되는거 있으면 삭제하기
-                repo.delete(entity.get());
-            }
+            //중복되는거 있으면 삭제하기
+            entity.ifPresent(repo::delete);
 
             EmailAuthentication newEntity = new EmailAuthentication(req.getEmail(), code);
             repo.save(newEntity);
