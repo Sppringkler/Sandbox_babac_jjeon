@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class EmailVerificationRepository {
 
     @PersistenceContext

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Random;
@@ -25,6 +26,7 @@ public class SMTPServiceImpl implements SMTPService {
     private final EmailVerificationRepository repo;
 
     @Override
+    @Transactional
     public EmailResp sendSecretNumber(EmailReq req) {
         String code = generateAuthenticationCode();
         try {
@@ -47,6 +49,7 @@ public class SMTPServiceImpl implements SMTPService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public AuthenticationResp authenticate(AuthenticationReq req) {
         Optional<EmailVerification> verification = repo
                 .findByEmailAndCode(req.getEmail(), req.getAuthentication());
