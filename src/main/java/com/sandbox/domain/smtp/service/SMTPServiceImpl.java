@@ -49,7 +49,6 @@ public class SMTPServiceImpl implements SMTPService {
         }
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public AuthenticationResp authenticate(AuthenticationReq req) {

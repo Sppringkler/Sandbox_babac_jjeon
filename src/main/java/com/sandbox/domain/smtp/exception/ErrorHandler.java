@@ -13,6 +13,7 @@ public class ErrorHandler {
     @ExceptionHandler(ErrorResp.class)
     public ResponseEntity<ErrorResp> handleErrorResp(ErrorResp ex) {
         log.error("Error 발생: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResp(ex.getMessage()));
+        ErrorResp errorResp = new ErrorResp(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResp);
     }
 }
