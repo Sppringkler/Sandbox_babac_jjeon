@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/email")
 public class SMTPController {
 
-    private final SMTPService ss;
+    private final SMTPService service;
 
     @PostMapping
     public ResponseEntity<EmailResp> sendSecretNumber(@RequestBody EmailReq req){
-        EmailResp resp = ss.sendSecretNumber(req);
+        EmailResp resp = service.sendSecretNumber(req);
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/authentication")
     public ResponseEntity<AuthenticationResp> authenticate(@RequestBody AuthenticationReq req){
-        AuthenticationResp resp = ss.authenticate(req);
+        AuthenticationResp resp = service.authenticate(req);
         return ResponseEntity.ok(resp);
     }
 }

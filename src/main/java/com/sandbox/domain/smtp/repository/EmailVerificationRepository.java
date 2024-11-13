@@ -5,13 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class EmailVerificationRepository {
 
     @PersistenceContext
@@ -36,13 +34,12 @@ public class EmailVerificationRepository {
 
     public void save(EmailVerification emailVerification) {
         if (emailVerification.getId() == null) {
-            em.persist(emailVerification);
+            em.persist(emailVerification); // 새로운 엔티티일 경우
         } else {
-            em.merge(emailVerification);
+            em.merge(emailVerification); // 이미 존재하는 엔티티일 경우
         }
     }
 
-    /* // 지금 쓰이지는 않는데, delete도 일단 만들어봄.
     public void delete(EmailVerification emailVerification) {
         if (em.contains(emailVerification)) {
             em.remove(emailVerification);
@@ -50,5 +47,4 @@ public class EmailVerificationRepository {
             em.remove(em.merge(emailVerification));
         }
     }
-     */
 }
