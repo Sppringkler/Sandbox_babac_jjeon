@@ -4,7 +4,7 @@ import com.sandbox.domain.smtp.dto.AuthenticationReq;
 import com.sandbox.domain.smtp.dto.AuthenticationResp;
 import com.sandbox.domain.smtp.dto.EmailReq;
 import com.sandbox.domain.smtp.dto.EmailResp;
-import com.sandbox.domain.smtp.entity.EmailVerification;
+import com.sandbox.domain.smtp.entity.EmailAuthentication;
 import com.sandbox.domain.smtp.repository.EmailVerificationRepository;
 
 import jakarta.mail.MessagingException;
@@ -31,14 +31,16 @@ public class SMTPServiceImpl implements SMTPService {
         String code = generateAuthenticationCode();
         try {
             sendEmail(req.getEmail(), code);
-            //중복되는 값 있나 확인 (set할 경우에는 괜찮은데, 객체 만들어서 넣을거면 삭제 필요)
-            Optional<EmailVerification> existingEntityOpt = repo.findByEmail(req.getEmail());
 
-            if (existingEntityOpt.isPresent()) {
+            //중복되는 값 있나 확인 (set할 경우에는 괜찮은데, 객체 만들어서 넣을거면 삭제 필요)
+            Optional<EmailAuthentication> entity = repo.findByEmail(req.getEmail());
+
+            if (entity.isPresent()) {
                 //중복되는거 있으면 삭제하기
-                repo.delete(existingEntityOpt.get());
+                repo.delete(entity.get());
             }
-            EmailVerification newEntity = new EmailVerification(req.getEmail(), code);
+
+            EmailAuthentication newEntity = new EmailAuthentication(req.getEmail(), code);
             repo.save(newEntity);
 
             return new EmailResp(true);
@@ -51,14 +53,15 @@ public class SMTPServiceImpl implements SMTPService {
     @Override
     @Transactional(readOnly = true)
     public AuthenticationResp authenticate(AuthenticationReq req) {
-        Optional<EmailVerification> verification = repo
+        Optional<EmailAuthentication> verification = repo
                 .findByEmailAndCode(req.getEmail(), req.getAuthentication());
 
         if (verification.isPresent()) {
-            EmailVerification emailVerification = verification.get();
-            repo.delete(emailVerification);
+            EmailAuthentication entity = verification.get();
+            repo.delete(entity);
             return new AuthenticationResp(true);
         }
+
         return new AuthenticationResp(false);
     }
 

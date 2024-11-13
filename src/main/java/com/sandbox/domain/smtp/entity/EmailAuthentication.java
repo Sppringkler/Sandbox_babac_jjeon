@@ -6,13 +6,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@ToString
-public class EmailVerification {
+public class EmailAuthentication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +18,7 @@ public class EmailVerification {
     private String code;
     private boolean verified;
 
-    public EmailVerification(String email, String code) {
+    public EmailAuthentication(String email, String code) {
         this.email = email;
         this.code = code;
         this.verified = false;

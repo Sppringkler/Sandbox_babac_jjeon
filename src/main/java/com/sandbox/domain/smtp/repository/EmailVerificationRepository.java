@@ -1,11 +1,10 @@
 package com.sandbox.domain.smtp.repository;
 
-import com.sandbox.domain.smtp.entity.EmailVerification;
+import com.sandbox.domain.smtp.entity.EmailAuthentication;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,16 +15,16 @@ public class EmailVerificationRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    public Optional<EmailVerification> findByEmail(String email) {
-        return em.createQuery("SELECT ev FROM EmailVerification ev WHERE ev.email = :email", EmailVerification.class)
+    public Optional<EmailAuthentication> findByEmail(String email) {
+        return em.createQuery("SELECT ev FROM EmailAuthentication ev WHERE ev.email = :email", EmailAuthentication.class)
                 .setParameter("email", email)
                 .getResultList()
                 .stream()
                 .findFirst();
     }
 
-    public Optional<EmailVerification> findByEmailAndCode(String email, String code) {
-        return em.createQuery("SELECT ev FROM EmailVerification ev WHERE ev.email = :email AND ev.code = :code AND ev.verified = false", EmailVerification.class)
+    public Optional<EmailAuthentication> findByEmailAndCode(String email, String code) {
+        return em.createQuery("SELECT ev FROM EmailAuthentication ev WHERE ev.email = :email AND ev.code = :code AND ev.verified = false", EmailAuthentication.class)
                 .setParameter("email", email)
                 .setParameter("code", code)
                 .getResultList()
@@ -33,15 +32,15 @@ public class EmailVerificationRepository {
                 .findFirst();
     }
 
-    public void save(EmailVerification emailVerification) {
-        if (emailVerification.getId() == null) {
-            em.persist(emailVerification);
+    public void save(EmailAuthentication emailAuthentication) {
+        if (emailAuthentication.getId() == null) {
+            em.persist(emailAuthentication);
         } else {
-            em.merge(emailVerification);
+            em.merge(emailAuthentication);
         }
     }
 
-    public void delete(EmailVerification emailVerification) {
-        em.remove(em.contains(emailVerification) ? emailVerification : em.merge(emailVerification));
+    public void delete(EmailAuthentication emailAuthentication) {
+        em.remove(em.contains(emailAuthentication) ? emailAuthentication : em.merge(emailAuthentication));
     }
 }
