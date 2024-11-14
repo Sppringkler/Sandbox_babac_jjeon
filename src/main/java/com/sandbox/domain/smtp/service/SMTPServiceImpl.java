@@ -7,7 +7,6 @@ import com.sandbox.domain.smtp.dto.EmailResp;
 import com.sandbox.domain.smtp.entity.EmailAuthentication;
 import com.sandbox.domain.smtp.exception.ErrorResp;
 import com.sandbox.domain.smtp.repository.SMTPRepository;
-import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
