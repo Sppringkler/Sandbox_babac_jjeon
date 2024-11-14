@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,10 +29,14 @@ public class SMTPRepository {
         }
     }
 
-    public List<EmailAuthentication> getEmailAuthentications(String email) {
-        return em.createQuery("select ea from EmailAuthentication ea where ea.email = :email", EmailAuthentication.class)
+    public Optional<EmailAuthentication> getEmailAuthentication(String email) {
+        return em.createQuery("select ea " +
+                        "from EmailAuthentication ea " +
+                        "where ea.email = :email " +
+                        "order by ea.id desc", EmailAuthentication.class)
                 .setParameter("email", email)
-                .getResultList();
+                .getResultList()
+                .stream().findFirst();
     }
 
 

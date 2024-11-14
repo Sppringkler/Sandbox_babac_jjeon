@@ -9,5 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailReq {
-    String email;
+    private String email;
 }

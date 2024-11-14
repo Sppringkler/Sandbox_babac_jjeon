@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -53,15 +54,16 @@ public class SMTPServiceImpl implements SMTPService {
     @Override
     public AuthenticationResp authenticate(AuthenticationReq req) {
         try {
-            List<EmailAuthentication> emailAuthentications = sr.getEmailAuthentications(req.getEmail());
+            Optional<EmailAuthentication> optionalEmailAuthentication = sr.getEmailAuthentication(req.getEmail());
 
-            for (EmailAuthentication ea : emailAuthentications) {
-                if(ea.getAuthentication().equals(req.getAuthentication())) {
-                    sr.deleteEmailAuthentications(ea.getEmail());
-                    return new AuthenticationResp(true);
-                }
+            EmailAuthentication ea = optionalEmailAuthentication.orElse(null);
+
+            if(ea != null && ea.getAuthentication().equals(req.getAuthentication())) {
+                sr.deleteEmailAuthentications(req.getEmail());
+                return new AuthenticationResp(true);
+            }else {
+                return new AuthenticationResp(false);
             }
-            return new AuthenticationResp(false);
 
         }catch (Exception e) {
             log.error(e.getMessage(), e);
