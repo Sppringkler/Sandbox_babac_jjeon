@@ -11,16 +11,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class EmailAuthentication {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String email;
-    private String code;
-    private boolean verified;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+    String email;
+    String authentication;
 
-    public EmailAuthentication(String email, String code) {
+    public EmailAuthentication(String email, String authentication) {
         this.email = email;
-        this.code = code;
-        this.verified = false;
+        this.authentication = authentication;
     }
 }

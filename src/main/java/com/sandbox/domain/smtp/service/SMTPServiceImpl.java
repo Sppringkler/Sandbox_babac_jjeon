@@ -5,76 +5,86 @@ import com.sandbox.domain.smtp.dto.AuthenticationResp;
 import com.sandbox.domain.smtp.dto.EmailReq;
 import com.sandbox.domain.smtp.dto.EmailResp;
 import com.sandbox.domain.smtp.entity.EmailAuthentication;
-import com.sandbox.domain.smtp.repository.EmailVerificationRepository;
-
-import jakarta.mail.MessagingException;
+import com.sandbox.domain.smtp.exception.ErrorResp;
+import com.sandbox.domain.smtp.repository.SMTPRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Random;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SMTPServiceImpl implements SMTPService {
-
-    private final JavaMailSender mailSender;
-    private final EmailVerificationRepository repo;
+    private final SMTPRepository sr;
+    private final JavaMailSender jms;
 
     @Override
     @Transactional
     public EmailResp sendSecretNumber(EmailReq req) {
-        String code = generateAuthenticationCode();
         try {
-            sendEmail(req.getEmail(), code);
+            String secretNum = makeSecretNumber();
+            EmailAuthentication ea = new EmailAuthentication(req.getEmail(), secretNum);
+            sr.createEmailAuthentication(ea);
+            
+            // 메일 발송 처리
+            sendMail(req.getEmail(), secretNum);
 
-            //중복되는 값 있나 확인 (set할 경우에는 괜찮은데, 객체 만들어서 넣을거면 삭제 필요)
-            Optional<EmailAuthentication> entity = repo.findByEmail(req.getEmail());
-
-            //중복되는거 있으면 삭제하기
-            entity.ifPresent(repo::delete);
-
-            EmailAuthentication newEntity = new EmailAuthentication(req.getEmail(), code);
-            repo.save(newEntity);
-
-            return new EmailResp(true);
-        } catch (MessagingException e) {
-            return new EmailResp(false);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ErrorResp("요청이 정상적으로 처리되지 않았습니다.");
         }
+
+        return new EmailResp(true);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthenticationResp authenticate(AuthenticationReq req) {
-        Optional<EmailAuthentication> verification = repo
-                .findByEmailAndCode(req.getEmail(), req.getAuthentication());
+        try {
+            Optional<EmailAuthentication> optionalEmailAuthentication = sr.getEmailAuthentication(req.getEmail());
 
-        if (verification.isPresent()) {
-            EmailAuthentication entity = verification.get();
-            repo.delete(entity);
-            return new AuthenticationResp(true);
+            EmailAuthentication ea = optionalEmailAuthentication.orElse(null);
+
+            if(ea != null && ea.getAuthentication().equals(req.getAuthentication())) {
+                sr.deleteEmailAuthentications(req.getEmail());
+                return new AuthenticationResp(true);
+            }else {
+                return new AuthenticationResp(false);
+            }
+
+        }catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ErrorResp("요청이 정상적으로 처리되지 않았습니다.");
         }
-
-        return new AuthenticationResp(false);
     }
 
-    private void sendEmail(String to, String code) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-        helper.setTo(to);
-        helper.setSubject("SANDBOX _ SMTP 인증 메일");
-        helper.setText("인증코드 : " + code);
-
-        mailSender.send(message);
-    }
-
-    private String generateAuthenticationCode() {
+    public String makeSecretNumber() {
         Random random = new Random();
-        return String.format("%06d", random.nextInt(1000000)); // 6자리 숫자 코드 생성
+        int password = 100000 +random.nextInt(900000);
+        return String.valueOf(password);
+    }
+
+    public void sendMail(String email,String secretNum){
+        MimeMessage msg = jms.createMimeMessage();
+
+        try{
+            MimeMessageHelper helper = new MimeMessageHelper(msg, false, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("sandbox 이메일 인증 비밀번호 입니다!!");
+            helper.setText("인증번호는 "+secretNum +" 입니다. \n" +
+                    "인증을 완료해주세요!!", true);
+            jms.send(msg);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ErrorResp("메세지 작성 실패!");
+        }
     }
 }
