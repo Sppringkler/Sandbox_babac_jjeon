@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class ArticleExceptionHandler {
-
     @ExceptionHandler(ErrorArticleResp.class)
     public ResponseEntity<ErrorArticleResp> handleErrorTodo(ErrorArticleResp ex){
         log.error("ErrorArticleResp 발생 : {}", ex.getMessage(), ex);

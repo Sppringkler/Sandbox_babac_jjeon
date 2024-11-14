@@ -8,5 +8,4 @@ import com.sandbox.domain.smtp.dto.EmailResp;
 public interface SMTPService {
     EmailResp sendSecretNumber(EmailReq req);
     AuthenticationResp authenticate(AuthenticationReq req);
-    String makeSecretNumber();
 }

@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ErrorArticleResp extends RuntimeException{
-    private String msg;
+public class ErrorArticleResp extends RuntimeException {
+    private String message;
 }

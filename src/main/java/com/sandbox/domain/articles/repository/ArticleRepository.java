@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,29 +26,23 @@ public class ArticleRepository {
         }
     }
 
-    public Map<String, Object> getOffsetList(int size, int page) {
-        Map<String, Object> map = new HashMap<>();
-
-        List<Article> list =  em.createQuery("select article from Article article", Article.class)
-                .setFirstResult(size * page) // 시작 위치
-                .setMaxResults(size)          // 가져올 데이터 수
+    public List<Article> getOffsetList(int size, int page) {
+        return em.createQuery("select article from Article article", Article.class)
+                .setFirstResult(size * page)
+                .setMaxResults(size)
                 .getResultList();
+    }
 
-        Long totalSize = em.createQuery("select count(article) from Article article", Long.class)
+    // 총 Article 개수
+    public Long countArticles() {
+        return em.createQuery("select count(article) from Article article", Long.class)
                 .getSingleResult();
-
-        int pageSize = totalSize.intValue() / size;
-
-        map.put("list", list);
-        map.put("size", pageSize);
-
-        return map;
     }
 
     public List<Article> getCursorList(int size, int cursorId) {
         return em.createQuery("select article from Article article "
-                                + "where article.id > :cursorId "
-                                + "order by article.id", Article.class)
+                        + "where article.id > :cursorId "
+                        + "order by article.id", Article.class)
                 .setParameter("cursorId", cursorId)
                 .setMaxResults(size)
                 .getResultList();
