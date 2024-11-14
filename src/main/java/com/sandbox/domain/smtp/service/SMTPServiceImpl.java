@@ -16,24 +16,18 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class SMTPServiceImpl implements SMTPService {
     private final SMTPRepository sr;
     private final JavaMailSender jms;
 
-    @PostConstruct
-    public void init() {
-        sr.deleteAll();
-    }
-
     @Override
+    @Transactional
     public EmailResp sendSecretNumber(EmailReq req) {
         try {
             String secretNum = makeSecretNumber();
@@ -52,6 +46,7 @@ public class SMTPServiceImpl implements SMTPService {
     }
 
     @Override
+    @Transactional
     public AuthenticationResp authenticate(AuthenticationReq req) {
         try {
             Optional<EmailAuthentication> optionalEmailAuthentication = sr.getEmailAuthentication(req.getEmail());
@@ -71,7 +66,6 @@ public class SMTPServiceImpl implements SMTPService {
         }
     }
 
-    @Override
     public String makeSecretNumber() {
         Random random = new Random();
         int password = 100000 +random.nextInt(900000);

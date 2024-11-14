@@ -11,7 +11,6 @@ public class EmailExceptionHandler {
     @ExceptionHandler(ErrorResp.class)
     public ResponseEntity<ErrorResp> handleErrorTodo(ErrorResp ex){
         log.error("ErrorArticleResp 발생 : {}", ex.getMessage(), ex);
-
         return ResponseEntity.status(202).body(ex);
     }
 }

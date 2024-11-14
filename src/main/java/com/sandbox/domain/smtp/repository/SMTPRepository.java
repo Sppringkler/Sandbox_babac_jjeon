@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,11 +14,6 @@ import java.util.Optional;
 public class SMTPRepository {
     @PersistenceContext
     private final EntityManager em;
-
-    @Transactional
-    public void deleteAll() {
-        em.createQuery("delete from EmailAuthentication").executeUpdate();
-    }
 
     public void createEmailAuthentication(EmailAuthentication ea){
         try {
@@ -38,7 +32,6 @@ public class SMTPRepository {
                 .getResultList()
                 .stream().findFirst();
     }
-
 
     public void deleteEmailAuthentications(String email){
         em.createQuery("delete from EmailAuthentication ea where ea.email = :email")
