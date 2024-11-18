@@ -14,14 +14,12 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     long kakao_id;
-    String email;
     String nickName;
     String accessToken;
     String refreshToken;
 
-    public User(long kakao_id, String email, String nickName, String accessToken, String refreshToken) {
+    public User(long kakao_id, String nickName, String accessToken, String refreshToken) {
         this.kakao_id = kakao_id;
-        this.email = email;
         this.nickName = nickName;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

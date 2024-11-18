@@ -3,6 +3,7 @@ package com.sandbox.domain.oauth.controller;
 import com.sandbox.domain.oauth.dto.AuthReq;
 import com.sandbox.domain.oauth.dto.AuthResp;
 import com.sandbox.domain.oauth.dto.MemberResp;
+import com.sandbox.domain.oauth.dto.ReissueResp;
 import com.sandbox.domain.oauth.exception.OAuthErrorResp;
 import com.sandbox.domain.oauth.service.OAuthService;
 import lombok.RequiredArgsConstructor;
@@ -36,15 +37,20 @@ public class OAuthController {
         if (accessToken == null || !accessToken.startsWith("Bearer ")) {
             throw new OAuthErrorResp(400, "ERR_MISSING_ACCESS_TOKEN");
         }
-        MemberResp resp = os.getMember(accessToken);
+        String token = accessToken.substring("Bearer ".length());
+        MemberResp resp = os.getMember(token);
 
         return ResponseEntity.ok(resp);
     }
 
-//    @GetMapping("/reissue")
-//    public ResponseEntity<ReissueResp> getReissue(){
-//
-//    }
+    @GetMapping("/reissue")
+    public ResponseEntity<ReissueResp> getReissue(@CookieValue(value = "refresh-token", required = false) String refreshToken) {
+        if(refreshToken == null) {
+            throw new OAuthErrorResp(400, "ERR_MISSING_REFRESH_TOKEN");
+        }
+        ReissueResp resp = os.getReissue(refreshToken);
+        return ResponseEntity.ok(resp);
+    }
 //
 //    @PostMapping("/logout")
 //    public ResponseEntity<?> logout(){

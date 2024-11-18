@@ -18,15 +18,12 @@ public class OAuthServiceImpl implements OAuthService {
     public AuthResp authenticate(AuthReq req) {
         KakaoResp kakaoResp = kakaoService.getAccessToken(new KakaoReq(req.getCode()));
 
-        System.out.println("============================================");
-        System.out.println(kakaoResp.getAccess_token());
-
         // 닉네임 조회
         UserInfoResp userInfoResp = kakaoService.getUserInfo(kakaoResp.getAccess_token());
         // 회원 저장
 
-        User user = new User(userInfoResp.getId(), userInfoResp.getProperties().get("kakao_account.email")
-        , userInfoResp.getProperties().get("kakao_account.name")
+        User user = new User(userInfoResp.getId(),
+         userInfoResp.getProperties().get("nickname")
         , kakaoResp.getAccess_token()
         , kakaoResp.getRefresh_token());
 
@@ -39,12 +36,14 @@ public class OAuthServiceImpl implements OAuthService {
     public MemberResp getMember(String accessToken) {
         UserInfoResp userInfoResp = kakaoService.getUserInfo(accessToken);
 
-        return new MemberResp(userInfoResp.getProperties().get("kakao_account.name"));
+        return new MemberResp(userInfoResp.getProperties().get("nickname"));
     }
 
     @Override
     public ReissueResp getReissue(String refreshToken) {
-        return null;
+        KakaoRenewResp kakaoRenewResp = kakaoService.getRenewAccessToken(new KakaoRenewReq(refreshToken));
+
+        return new ReissueResp(kakaoRenewResp.getAccess_token());
     }
 
     @Override
